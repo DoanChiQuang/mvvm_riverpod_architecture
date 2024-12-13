@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mvvm_riverpod_architecture/src/routing/app_router.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/themes/theme.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -14,12 +15,9 @@ class MyApp extends ConsumerWidget {
         // return AppStartupWidget(
         //   onLoaded: (_) => child!,
         // );
-        return const Placeholder();
+        return SafeArea(child: child!);
       },
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.theme,
       debugShowCheckedModeBanner: false,
       title: 'MVVM Riverpod Architecture',
     );

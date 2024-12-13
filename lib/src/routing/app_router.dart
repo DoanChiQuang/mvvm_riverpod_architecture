@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signin/widgets/signin_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signup/widgets/signup_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/widgets/onboarding_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
@@ -11,6 +14,7 @@ final _todoNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'todo');
 enum AppRoute {
   onboaring,
   signIn,
+  signUp,
   todos,
   todo,
   addTodo,
@@ -20,10 +24,11 @@ enum AppRoute {
 @riverpod
 GoRouter goRouter(Ref ref) {
   return GoRouter(
-    initialLocation: '/signIn',
+    initialLocation: '/onboarding',
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
     redirect: (context, state) {
+      // return '/onboarding';
       return null;
     },
     // refreshListenable: GoRouterRefreshStream()
@@ -32,14 +37,21 @@ GoRouter goRouter(Ref ref) {
         path: '/onboarding',
         name: AppRoute.onboaring.name,
         pageBuilder: (context, state) => const NoTransitionPage(
-          child: Placeholder(),
+          child: OnboardingScreen(),
         ),
       ),
       GoRoute(
         path: '/signIn',
         name: AppRoute.signIn.name,
         pageBuilder: (context, state) => const NoTransitionPage(
-          child: Placeholder(),
+          child: SigninScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/signUp',
+        name: AppRoute.signUp.name,
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: SignupScreen(),
         ),
       ),
       StatefulShellRoute.indexedStack(

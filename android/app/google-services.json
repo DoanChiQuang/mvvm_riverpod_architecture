@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "680342295184",
+    "project_id": "akashic-platform",
+    "storage_bucket": "akashic-platform.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680342295184:android:e86345d134f9b803a3be15",
+        "android_client_info": {
+          "package_name": "com.example.mvvm_riverpod_architecture"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAIkIjmGosQ9aj521dm03f4Jb-MqTVJH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680342295184:android:94d8bc39feed8ca8a3be15",
+        "android_client_info": {
+          "package_name": "com.example.mvvm_riverpod_architecture"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAIkIjmGosQ9aj521dm03f4Jb-MqTVJH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680342295184:android:8a91293a95c2e7cea3be15",
+        "android_client_info": {
+          "package_name": "com.example.mvv"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAIkIjmGosQ9aj521dm03f4Jb-MqTVJH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
