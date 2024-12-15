@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signin/view_model/signin_viewmodel.dart';
 
-class SigninFormWidget extends StatefulWidget {
+class SigninFormWidget extends ConsumerStatefulWidget {
   const SigninFormWidget({super.key});
 
   @override
-  State<SigninFormWidget> createState() => _SigninFormWidgetState();
+  ConsumerState<SigninFormWidget> createState() => _SigninFormWidgetState();
 }
 
-class _SigninFormWidgetState extends State<SigninFormWidget> {
+class _SigninFormWidgetState extends ConsumerState<SigninFormWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   bool _isObscurePasswordText = true;
 
   void _setObscurePasswordText() {
     setState(() => _isObscurePasswordText = !_isObscurePasswordText);
+  }
+
+  Future<void> _onSubmit() async {
+    if (_formKey.currentState!.saveAndValidate()) {
+      final formData = _formKey.currentState?.value;
+      final viewModel = ref.read(signinViewModelProvider.notifier);
+      await viewModel.signInWithEmailAndPassword(
+        email: formData?['email'],
+        password: formData?['password'],
+      );
+    }
   }
 
   @override
@@ -72,7 +85,7 @@ class _SigninFormWidgetState extends State<SigninFormWidget> {
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(Sizes.s56),
             ),
-            onPressed: () {},
+            onPressed: _onSubmit,
             child: const Text('Continue'),
           ),
         ],

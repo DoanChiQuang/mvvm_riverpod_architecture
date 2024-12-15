@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signup/view_model/signup_viewmodel.dart';
+import 'package:mvvm_riverpod_architecture/src/utils/validators/validators.dart';
 
-class SignupFormWidget extends StatefulWidget {
+class SignupFormWidget extends ConsumerStatefulWidget {
   const SignupFormWidget({super.key});
 
   @override
-  State<SignupFormWidget> createState() => _SignupFormWidgetState();
+  ConsumerState<SignupFormWidget> createState() => _SignupFormWidgetState();
 }
 
-class _SignupFormWidgetState extends State<SignupFormWidget> {
+class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   bool _isObscurePasswordText = true;
 
   void _setObscurePasswordText() {
     setState(() => _isObscurePasswordText = !_isObscurePasswordText);
+  }
+
+  Future<void> _onSubmit() async {
+    if (_formKey.currentState!.saveAndValidate()) {
+      final formData = _formKey.currentState?.value;
+      final viewModel = ref.read(signupViewModelProvider.notifier);
+      await viewModel.createUserWithEmailAndPassword(
+        email: formData?['email'],
+        password: formData?['password'],
+      );
+    }
   }
 
   @override
@@ -65,7 +79,7 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.text,
-            validator: FormBuilderValidators.minLength(8),
+            validator: (val) => Validators.validatePassword(val, 'Password'),
           ),
           gapH16,
           FormBuilderTextField(
@@ -92,14 +106,19 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.text,
-            validator: FormBuilderValidators.minLength(8),
+            validator: (val) {
+              if (_formKey.currentState?.fields['password']?.value != val) {
+                return 'Confirm password must match with password.';
+              }
+              return null;
+            },
           ),
           gapH16,
           FilledButton(
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(Sizes.s56),
             ),
-            onPressed: () {},
+            onPressed: _onSubmit,
             child: const Text('Continue'),
           ),
         ],

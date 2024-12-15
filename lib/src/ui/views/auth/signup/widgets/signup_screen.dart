@@ -31,7 +31,7 @@ class SignupScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   gapH24,
-                  SignupFormWidget(),
+                  const SignupFormWidget(),
                   gapH24,
                   Text(
                     'or',

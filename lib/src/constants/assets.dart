@@ -4,4 +4,7 @@ class Assets {
 
   // images/onboarding/
   static const banner = 'assets/images/onboarding/banner.png';
+
+  // images/verify/
+  static const notifyMail = 'assets/images/verify/notify_mail.png';
 }

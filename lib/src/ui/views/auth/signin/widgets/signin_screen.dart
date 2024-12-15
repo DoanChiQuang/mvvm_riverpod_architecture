@@ -7,14 +7,9 @@ import 'package:mvvm_riverpod_architecture/src/routing/app_router.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signin/widgets/signin_form_widget.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_center.dart';
 
-class SigninScreen extends StatefulWidget {
+class SigninScreen extends StatelessWidget {
   const SigninScreen({super.key});
 
-  @override
-  State<SigninScreen> createState() => _SigninScreenState();
-}
-
-class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +31,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   gapH24,
-                  SigninFormWidget(),
+                  const SigninFormWidget(),
                   gapH24,
                   Text(
                     'or',
