@@ -6,7 +6,7 @@ part of 'verify_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$verifyViewModelHash() => r'd76ad3a1e5a54ad7d7c2a87abc9137ec05a6c415';
+String _$verifyViewModelHash() => r'e8d350a56fc8f06ff5a316f8a027bf6611898d01';
 
 /// See also [VerifyViewModel].
 @ProviderFor(VerifyViewModel)

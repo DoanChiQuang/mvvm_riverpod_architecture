@@ -18,19 +18,21 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
   @override
   void initState() {
     super.initState();
-    final viewModel = ref.read(verifyViewModelProvider.notifier);
-    viewModel.sendEmailVerification();
-    viewModel.setTimerForAutoRedirect();
+    Future(() {
+      final viewModel = ref.read(verifyViewModelProvider.notifier);
+      viewModel.sendEmailVerification();
+      viewModel.setTimerForAutoRedirect();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(verifyViewModelProvider);
-    if (viewModel.isVerified) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    final viewModel = ref.read(verifyViewModelProvider.notifier);
+    ref.listen(verifyViewModelProvider, (prev, state) {
+      if (state.isVerified) {
         context.goNamed(AppRoute.todos.name);
-      });
-    }
+      }
+    });
     return Scaffold(
       body: CustomCenter(
         padding: const EdgeInsets.all(Sizes.s16),
@@ -42,7 +44,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(Sizes.s56),
               ),
-              onPressed: () {},
+              onPressed: () => viewModel.sendEmailVerification(),
               child: const Text('Resend'),
             ),
             gapH16,
@@ -50,7 +52,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(Sizes.s56),
               ),
-              onPressed: () {},
+              onPressed: () => viewModel.signOut(),
               child: Text(
                 'Cancel',
                 style: Theme.of(context).textTheme.labelLarge,

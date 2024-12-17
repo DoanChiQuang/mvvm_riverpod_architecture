@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:mvvm_riverpod_architecture/src/data/repositories/auth/auth_repository.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/verify/view_model/verify_state.dart';
+import 'package:mvvm_riverpod_architecture/src/utils/helpers/loading_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'verify_viewmodel.g.dart';
@@ -10,26 +11,17 @@ part 'verify_viewmodel.g.dart';
 class VerifyViewModel extends _$VerifyViewModel {
   @override
   VerifyState build() {
-    return VerifyState(false);
-  }  
+    return VerifyState(LoadingStateEnum.initial, null, false);
+  }
 
   Future<void> sendEmailVerification() async {
-    // loading: true
-    // success: false
-    // data: null
-    // error: null
+    state = VerifyState(LoadingStateEnum.loading, null, false);
     try {
       final authRepository = ref.watch(authRepositoryProvider);
       await authRepository.sendEmailVerification();
-      // success: true
-      // data: null or 'Sign in successful.'
-      // error: null
-    } catch (e) {
-      // success: false
-      // data: null
-      // error: e.message
-    } finally {
-      // loading: false
+      state = VerifyState(LoadingStateEnum.success, null, false);
+    } on Exception catch (e) {
+      state = VerifyState(LoadingStateEnum.error, e, false);
     }
   }
 
@@ -41,10 +33,21 @@ class VerifyViewModel extends _$VerifyViewModel {
         await authRepository.reload();
         final isVerified = authRepository.currentUser?.emailVerified ?? false;
         if (isVerified) {
-          state = VerifyState(true);
+          state = VerifyState(LoadingStateEnum.success, null, true);
           timer.cancel();
         }
       },
     );
+  }
+
+  Future<void> signOut() async {
+    state = VerifyState(LoadingStateEnum.loading, null, false);
+    try {
+      final authRepository = ref.watch(authRepositoryProvider);
+      await authRepository.signOut();
+      state = VerifyState(LoadingStateEnum.success, null, false);
+    } on Exception catch (e) {
+      state = VerifyState(LoadingStateEnum.error, e, false);
+    }
   }
 }

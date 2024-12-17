@@ -39,7 +39,7 @@ class AuthRepository {
         password: password,
       );
     } catch (e) {
-      // Throw new Error with Message
+      throw Exception(e);
     }
   }
 
@@ -53,7 +53,7 @@ class AuthRepository {
         password: password,
       );
     } catch (e) {
-      // Throw new Error with Message
+      throw Exception(e);
     }
   }
 

@@ -36,6 +36,7 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = ref.watch(signupViewModelProvider);
     return FormBuilder(
       key: _formKey,
       child: Column(
@@ -118,8 +119,17 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(Sizes.s56),
             ),
-            onPressed: _onSubmit,
-            child: const Text('Continue'),
+            onPressed: !viewModel.isLoading ? _onSubmit : null,
+            child: !viewModel.isLoading
+                ? const Text('Continue')
+                : const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      gapW16,
+                      Text('Loading...'),
+                    ],
+                  ),
           ),
         ],
       ),
