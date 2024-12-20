@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/view_model/auth_viewmodel.dart';
+import 'package:mvvm_riverpod_architecture/src/utils/helpers/async_value_ui.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/validators/validators.dart';
 
 class SignupFormWidget extends ConsumerStatefulWidget {
@@ -36,9 +37,10 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authViewModelProvider, (_, state) {
-      // Handle Loading or Error here
-    });
+    ref.listen(
+      authViewModelProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
     final viewModel = ref.watch(authViewModelProvider);
     return FormBuilder(
       key: _formKey,

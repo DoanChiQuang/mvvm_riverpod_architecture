@@ -7,6 +7,7 @@ import 'package:mvvm_riverpod_architecture/src/ui/views/auth/view_model/auth_vie
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/verify/verify_banner_widget.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_center.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/formats/format.dart';
+import 'package:mvvm_riverpod_architecture/src/utils/helpers/async_value_ui.dart';
 
 class VerifyScreen extends ConsumerStatefulWidget {
   const VerifyScreen({super.key});
@@ -34,7 +35,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
         }
       },
     );
-  }  
+  }
 
   void _resend() {
     setState(() {
@@ -64,9 +65,10 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authViewModelProvider, (_, state) {
-      // Handle Loading or Error here
-    });
+    ref.listen(
+      authViewModelProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
     return Scaffold(
       body: CustomCenter(
         padding: const EdgeInsets.all(Sizes.s16),
@@ -79,7 +81,9 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
                 minimumSize: const Size.fromHeight(Sizes.s56),
               ),
               onPressed: _canResend ? _resend : null,
-              child: Text(_canResend ? 'Resend' : Format.timer(_remainingSeconds, minute: true)),
+              child: Text(_canResend
+                  ? 'Resend'
+                  : Format.timer(_remainingSeconds, minute: true)),
             ),
             gapH16,
             OutlinedButton(
