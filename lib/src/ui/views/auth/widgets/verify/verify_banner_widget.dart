@@ -24,7 +24,7 @@ class VerifyBannerWidget extends StatelessWidget {
           const Image(image: AssetImage(Assets.notifyMail)),
           gapH16,
           Text(
-            'An email has been sent to youremail@gmail.com with link to verify your account. If you have not received the email after a few minutes, please check your spam folder.',
+            'An email has been sent with link to verify your account. If you have not received the email after a few minutes, please check your spam folder.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleSmall,
           ),

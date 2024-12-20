@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'signin_viewmodel.dart';
+part of 'onboarding_viewmodel.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$signinViewModelHash() => r'f3af3869e919f97e8f70fad0f463e3c85588cc53';
+String _$onboardingViewModelHash() =>
+    r'ac79376d7497ef3ba2fafca250dde36e463edd13';
 
-/// See also [SigninViewModel].
-@ProviderFor(SigninViewModel)
-final signinViewModelProvider =
-    AutoDisposeNotifierProvider<SigninViewModel, LoadingState>.internal(
-  SigninViewModel.new,
-  name: r'signinViewModelProvider',
+/// See also [OnboardingViewModel].
+@ProviderFor(OnboardingViewModel)
+final onboardingViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<OnboardingViewModel, void>.internal(
+  OnboardingViewModel.new,
+  name: r'onboardingViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$signinViewModelHash,
+      : _$onboardingViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SigninViewModel = AutoDisposeNotifier<LoadingState>;
+typedef _$OnboardingViewModel = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

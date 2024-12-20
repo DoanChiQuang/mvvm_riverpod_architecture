@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_riverpod_architecture/src/data/repositories/auth/auth_repository.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/verify/widgets/verify_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/data/repositories/onboarding/onboarding_repository.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signin/signin_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signup/signup_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/verify/verify_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/refresh_listenable.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signin/widgets/signin_screen.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signup/widgets/signup_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/widgets/onboarding_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/scaffold_with_navigation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,37 +31,55 @@ enum AppRoute {
 
 @riverpod
 GoRouter goRouter(Ref ref) {
-  final auth = ref.watch(authRepositoryProvider);
+  final authRepository = ref.watch(authRepositoryProvider);
+  final onboardingRepository = ref.watch(onboardingRepositoryProvider);
   return GoRouter(
-    initialLocation: '/onboarding',
+    initialLocation: '/signIn',
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
     redirect: (context, state) {
+      if (onboardingRepository.isLoading) {
+        return null;
+      }
+      final didCompleteOnboarding =
+          onboardingRepository.requireValue.isOnboardingComplete();
       final path = state.uri.path;
-      final bool isLoggedIn = auth.currentUser != null;
-      final bool isVerified = auth.currentUser?.emailVerified ?? false;
+      if (!didCompleteOnboarding) {
+        if (path != '/onboarding') {
+          return '/onboarding';
+        }
+        return null;
+      }
+      final bool isLoggedIn = authRepository.currentUser != null;
+      final bool isVerified =
+          authRepository.currentUser?.emailVerified ?? false;
       if (isLoggedIn && isVerified) {
         if (path.startsWith('/onboarding') ||
             path.startsWith('/signIn') ||
-            path.startsWith('/signUp')) {
+            path.startsWith('/signUp') ||
+            path.startsWith('/verify')) {
           return '/todos';
         }
-      }
-      if (!isLoggedIn) {
-        if (path.startsWith('/todos') || path.startsWith('/account')) {
-          return '/onboarding';
-        }
-      }
-      if (isLoggedIn && !isVerified) {
+      } else if (isLoggedIn && !isVerified) {
         if (path.startsWith('/onboarding') ||
             path.startsWith('/signIn') ||
             path.startsWith('/signUp')) {
           return '/verify';
         }
+      } else {
+        if (path.startsWith('/onboarding') ||
+            path.startsWith('/todos') ||
+            path.startsWith('/account') ||
+            path.startsWith('/verify')) {
+          return '/signIn';
+        }
       }
       return null;
     },
-    refreshListenable: GoRouterRefreshStream(auth.authStateChanges()),
+    refreshListenable: Listenable.merge([
+      GoRouterRefreshStream(authRepository.authStateChanges()),
+      GoRouterRefreshStream(authRepository.userChanges()),
+    ]),
     routes: [
       GoRoute(
         path: '/onboarding',

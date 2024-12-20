@@ -58,14 +58,26 @@ class AuthRepository {
   }
 
   Future<void> sendEmailVerification() async {
-    await _firebaseAuth.currentUser?.sendEmailVerification();
+    try {
+      await _firebaseAuth.currentUser?.sendEmailVerification();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Future<void> reload() async {
-    await _firebaseAuth.currentUser?.reload();
+    try {
+      await _firebaseAuth.currentUser?.reload();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    try {
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

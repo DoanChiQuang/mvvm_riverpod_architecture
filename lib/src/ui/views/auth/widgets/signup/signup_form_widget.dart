@@ -4,16 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signin/view_model/signin_viewmodel.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/view_model/auth_viewmodel.dart';
+import 'package:mvvm_riverpod_architecture/src/utils/validators/validators.dart';
 
-class SigninFormWidget extends ConsumerStatefulWidget {
-  const SigninFormWidget({super.key});
+class SignupFormWidget extends ConsumerStatefulWidget {
+  const SignupFormWidget({super.key});
 
   @override
-  ConsumerState<SigninFormWidget> createState() => _SigninFormWidgetState();
+  ConsumerState<SignupFormWidget> createState() => _SignupFormWidgetState();
 }
 
-class _SigninFormWidgetState extends ConsumerState<SigninFormWidget> {
+class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   bool _isObscurePasswordText = true;
@@ -25,8 +26,8 @@ class _SigninFormWidgetState extends ConsumerState<SigninFormWidget> {
   Future<void> _onSubmit() async {
     if (_formKey.currentState!.saveAndValidate()) {
       final formData = _formKey.currentState?.value;
-      final viewModel = ref.read(signinViewModelProvider.notifier);
-      await viewModel.signInWithEmailAndPassword(
+      final viewModel = ref.read(authViewModelProvider.notifier);
+      await viewModel.signUp(
         email: formData?['email'],
         password: formData?['password'],
       );
@@ -35,7 +36,10 @@ class _SigninFormWidgetState extends ConsumerState<SigninFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = ref.watch(signinViewModelProvider);
+    ref.listen(authViewModelProvider, (_, state) {
+      // Handle Loading or Error here
+    });
+    final viewModel = ref.watch(authViewModelProvider);
     return FormBuilder(
       key: _formKey,
       child: Column(
@@ -79,7 +83,39 @@ class _SigninFormWidgetState extends ConsumerState<SigninFormWidget> {
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.text,
-            validator: FormBuilderValidators.minLength(8),
+            validator: (val) => Validators.validatePassword(val, 'Password'),
+          ),
+          gapH16,
+          FormBuilderTextField(
+            name: 'confirmPassword',
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
+              border: Theme.of(context).inputDecorationTheme.border,
+              labelText: 'Confirm password',
+              prefixIcon: const Icon(
+                Icons.lock_outline,
+                size: Sizes.iconMd,
+              ),
+              suffixIcon: IconButton(
+                onPressed: _setObscurePasswordText,
+                icon: Icon(
+                  _isObscurePasswordText
+                      ? AntDesign.eye_invisible_outline
+                      : AntDesign.eye_outline,
+                  size: Sizes.iconMd,
+                ),
+              ),
+            ),
+            obscureText: _isObscurePasswordText,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.text,
+            validator: (val) {
+              if (_formKey.currentState?.fields['password']?.value != val) {
+                return 'Confirm password must match with password.';
+              }
+              return null;
+            },
           ),
           gapH16,
           FilledButton(

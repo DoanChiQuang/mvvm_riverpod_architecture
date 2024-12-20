@@ -4,11 +4,11 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/assets.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 import 'package:mvvm_riverpod_architecture/src/routing/app_router.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/signup/widgets/signup_form_widget.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signin/signin_form_widget.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_center.dart';
 
-class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+class SigninScreen extends StatelessWidget {
+  const SigninScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +27,11 @@ class SignupScreen extends StatelessWidget {
                   ),
                   gapH24,
                   Text(
-                    'Create an account',
+                    'Welcome back',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   gapH24,
-                  const SignupFormWidget(),
+                  const SigninFormWidget(),
                   gapH24,
                   Text(
                     'or',
@@ -53,13 +53,9 @@ class SignupScreen extends StatelessWidget {
                     ),
                   ),
                   gapH24,
-                  TextButton.icon(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      size: Sizes.iconMd,
-                    ),
-                    onPressed: () => context.goNamed(AppRoute.signIn.name),
-                    label: const Text('Back to Sign in'),
+                  TextButton(
+                    onPressed: () => context.goNamed(AppRoute.signUp.name),
+                    child: const Text("Don't have an account?"),
                   )
                 ],
               ),
