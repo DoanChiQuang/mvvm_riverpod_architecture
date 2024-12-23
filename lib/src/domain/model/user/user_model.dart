@@ -8,7 +8,7 @@ part 'user_model.g.dart';
 @freezed
 class UserModel with _$UserModel {
   const factory UserModel({
-    required String uid,
+    String? uid,
     String? email,
     bool? emailVerified,
     String? displayName,
@@ -18,9 +18,9 @@ class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 
   factory UserModel.fromUser(User? user) => UserModel(
-        uid: user!.uid,
-        email: user.email,
-        emailVerified: user.emailVerified,
-        displayName: user.displayName,
+        uid: user?.uid,
+        email: user?.email,
+        emailVerified: user?.emailVerified,
+        displayName: user?.displayName,
       );
 }

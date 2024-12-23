@@ -1,4 +1,7 @@
 class Assets {
+  static const empty = 'assets/images/empty.png';
+  static const error = 'assets/images/error.png';
+
   // images/logo/
   static const logo = 'assets/images/logo/akashic.png';
 

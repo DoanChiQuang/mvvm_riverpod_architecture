@@ -27,8 +27,8 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
   Future<void> _onSubmit() async {
     if (_formKey.currentState!.saveAndValidate()) {
       final formData = _formKey.currentState?.value;
-      final viewModel = ref.read(authViewModelProvider.notifier);
-      await viewModel.signUp(
+      final authViewModel = ref.read(authViewModelProvider.notifier);
+      await authViewModel.signUp(
         email: formData?['email'],
         password: formData?['password'],
       );
@@ -41,7 +41,7 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
       authViewModelProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
-    final viewModel = ref.watch(authViewModelProvider);
+    final authStateViewModel = ref.watch(authViewModelProvider);
     return FormBuilder(
       key: _formKey,
       child: Column(
@@ -124,8 +124,8 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(Sizes.s56),
             ),
-            onPressed: !viewModel.isLoading ? _onSubmit : null,
-            child: !viewModel.isLoading
+            onPressed: !authStateViewModel.isLoading ? _onSubmit : null,
+            child: !authStateViewModel.isLoading
                 ? const Text('Continue')
                 : const Row(
                     mainAxisAlignment: MainAxisAlignment.center,

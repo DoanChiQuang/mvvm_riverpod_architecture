@@ -20,7 +20,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserModel {
-  String get uid => throw _privateConstructorUsedError;
+  String? get uid => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   bool? get emailVerified => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
   $Res call(
-      {String uid, String? email, bool? emailVerified, String? displayName});
+      {String? uid, String? email, bool? emailVerified, String? displayName});
 }
 
 /// @nodoc
@@ -59,16 +59,16 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = null,
+    Object? uid = freezed,
     Object? email = freezed,
     Object? emailVerified = freezed,
     Object? displayName = freezed,
   }) {
     return _then(_value.copyWith(
-      uid: null == uid
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String uid, String? email, bool? emailVerified, String? displayName});
+      {String? uid, String? email, bool? emailVerified, String? displayName});
 }
 
 /// @nodoc
@@ -110,16 +110,16 @@ class __$$UserModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = null,
+    Object? uid = freezed,
     Object? email = freezed,
     Object? emailVerified = freezed,
     Object? displayName = freezed,
   }) {
     return _then(_$UserModelImpl(
-      uid: null == uid
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -140,13 +140,13 @@ class __$$UserModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
   const _$UserModelImpl(
-      {required this.uid, this.email, this.emailVerified, this.displayName});
+      {this.uid, this.email, this.emailVerified, this.displayName});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
 
   @override
-  final String uid;
+  final String? uid;
   @override
   final String? email;
   @override
@@ -206,7 +206,7 @@ class _$UserModelImpl with DiagnosticableTreeMixin implements _UserModel {
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
-      {required final String uid,
+      {final String? uid,
       final String? email,
       final bool? emailVerified,
       final String? displayName}) = _$UserModelImpl;
@@ -215,7 +215,7 @@ abstract class _UserModel implements UserModel {
       _$UserModelImpl.fromJson;
 
   @override
-  String get uid;
+  String? get uid;
   @override
   String? get email;
   @override

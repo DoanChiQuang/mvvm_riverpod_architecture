@@ -10,7 +10,6 @@ class AuthViewModel extends _$AuthViewModel {
   @override
   FutureOr<void> build() {
     _authRepository = ref.read(authRepositoryProvider);
-    return null;
   }
 
   Future<void> signUp({

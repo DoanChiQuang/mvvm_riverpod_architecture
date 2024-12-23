@@ -12,7 +12,7 @@ class OnboardingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(onboardingViewModelProvider);
+    final onboardingStateViewModel = ref.watch(onboardingViewModelProvider);
     return Scaffold(
       body: CustomCenter(
         padding: const EdgeInsets.all(Sizes.s16),
@@ -24,11 +24,11 @@ class OnboardingScreen extends ConsumerWidget {
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(Sizes.s56),
               ),
-              onPressed: !viewModel.isLoading
+              onPressed: !onboardingStateViewModel.isLoading
                   ? () async {
-                      await ref
-                          .read(onboardingViewModelProvider.notifier)
-                          .completeOnboarding();
+                      final onboardingViewModel =
+                          ref.read(onboardingViewModelProvider.notifier);
+                      await onboardingViewModel.completeOnboarding();
                       if (context.mounted) {
                         context.goNamed(AppRoute.signIn.name);
                       }

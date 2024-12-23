@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_riverpod_architecture/src/data/repositories/auth/auth_repository.dart';
 import 'package:mvvm_riverpod_architecture/src/data/repositories/onboarding/onboarding_repository.dart';
+import 'package:mvvm_riverpod_architecture/src/domain/model/todo/todo_model.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signin/signin_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signup/signup_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/verify/verify_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/todo/widgets/edit_todo_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/todo/widgets/todos_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/refresh_listenable.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/widgets/onboarding_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/scaffold_with_navigation.dart';
@@ -23,7 +26,6 @@ enum AppRoute {
   signUp,
   verify,
   todos,
-  todo,
   addTodo,
   editTodo,
   account,
@@ -121,43 +123,33 @@ GoRouter goRouter(Ref ref) {
                 path: '/todos',
                 name: AppRoute.todos.name,
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: Placeholder(),
+                  child: TodosScreen(),
                 ),
                 routes: [
                   GoRoute(
                     path: 'add',
                     name: AppRoute.addTodo.name,
-                    parentNavigatorKey: _rootNavigatorKey,
                     pageBuilder: (context, state) {
                       return const MaterialPage(
                         fullscreenDialog: true,
-                        child: Placeholder(),
+                        child: EditTodoScreen(),
                       );
                     },
                   ),
                   GoRoute(
                     path: ':id',
-                    name: AppRoute.todo.name,
+                    name: AppRoute.editTodo.name,
                     pageBuilder: (context, state) {
-                      // final id = state.pathParameters['id']!;
-                      return const MaterialPage(
-                        child: Placeholder(),
+                      final todoId = state.pathParameters['id'];
+                      final todo = state.extra as TodoModel;
+                      return MaterialPage(
+                        fullscreenDialog: true,
+                        child: EditTodoScreen(
+                          todoId: todoId,
+                          todo: todo,
+                        ),
                       );
                     },
-                    routes: [
-                      GoRoute(
-                        path: 'edit',
-                        name: AppRoute.editTodo.name,
-                        pageBuilder: (context, state) {
-                          // final todoId = state.pathParameters['id'];
-                          // final todo = state.extra as Todo;
-                          return const MaterialPage(
-                            fullscreenDialog: true,
-                            child: Placeholder(),
-                          );
-                        },
-                      ),
-                    ],
                   ),
                 ],
               ),

@@ -42,7 +42,8 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
       _canResend = false;
       _remainingSeconds = _countDownSecond;
     });
-    ref.read(authViewModelProvider.notifier).sendMail();
+    final authViewModel = ref.read(authViewModelProvider.notifier);
+    authViewModel.sendMail();
     _startCountDown();
   }
 
@@ -52,7 +53,8 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
     _canResend = false;
     _remainingSeconds = _countDownSecond;
     Future(() {
-      ref.read(authViewModelProvider.notifier).sendMail();
+      final authViewModel = ref.read(authViewModelProvider.notifier);
+      authViewModel.sendMail();
       _startCountDown();
     });
   }
