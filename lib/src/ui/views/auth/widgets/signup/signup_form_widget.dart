@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/auth/view_model/auth_viewmodel.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_loading.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/async_value_ui.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/validators/validators.dart';
 
@@ -41,7 +42,7 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
       authViewModelProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
-    final authStateViewModel = ref.watch(authViewModelProvider);
+    final authState = ref.watch(authViewModelProvider);
     return FormBuilder(
       key: _formKey,
       child: Column(
@@ -124,17 +125,10 @@ class _SignupFormWidgetState extends ConsumerState<SignupFormWidget> {
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(Sizes.s56),
             ),
-            onPressed: !authStateViewModel.isLoading ? _onSubmit : null,
-            child: !authStateViewModel.isLoading
+            onPressed: !authState.isLoading ? _onSubmit : null,
+            child: !authState.isLoading
                 ? const Text('Continue')
-                : const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      gapW16,
-                      Text('Loading...'),
-                    ],
-                  ),
+                : const CustomLoading(),
           ),
         ],
       ),

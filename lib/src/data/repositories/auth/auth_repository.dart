@@ -65,6 +65,14 @@ class AuthRepository {
     }
   }
 
+  Future<void> updatePassword({required String password}) async {
+    try {
+      await _firebaseAuth.currentUser?.updatePassword(password);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<void> reload() async {
     try {
       await _firebaseAuth.currentUser?.reload();

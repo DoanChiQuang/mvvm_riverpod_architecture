@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/assets.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 
-class BannerWidget extends StatelessWidget {
-  const BannerWidget({super.key});
+class OnboardingBannerWidget extends StatelessWidget {
+  const OnboardingBannerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

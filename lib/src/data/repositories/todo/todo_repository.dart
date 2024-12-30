@@ -24,13 +24,7 @@ class TodoRepository {
 
   Future<void> create({required TodoModel todo}) async {
     try {
-      final todoModel = {
-        'uid': todo.uid,
-        'title': todo.title,
-        'description': todo.description,
-        'status': todo.status,
-      };
-      await _firestore.collection(todosPath()).add(todoModel);
+      await _firestore.collection(todosPath()).add(todo.toJson());
     } catch (e) {
       throw Exception(e);
     }
@@ -38,13 +32,7 @@ class TodoRepository {
 
   Future<void> update({required String todoId, required TodoModel todo}) async {
     try {
-      final todoModel = {
-        'uid': todo.uid,
-        'title': todo.title,
-        'description': todo.description,
-        'status': todo.status,
-      };
-      await _firestore.doc(todoPath(todoId)).update(todoModel);
+      await _firestore.doc(todoPath(todoId)).update(todo.toJson());
     } catch (e) {
       throw Exception(e);
     }

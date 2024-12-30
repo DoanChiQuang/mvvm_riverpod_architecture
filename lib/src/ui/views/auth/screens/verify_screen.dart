@@ -17,6 +17,7 @@ class VerifyScreen extends ConsumerStatefulWidget {
 }
 
 class _VerifyScreenState extends ConsumerState<VerifyScreen> {
+  late AuthViewModel _authViewModel;
   final _countDownSecond = 120;
   late Timer _timer;
   late bool _canResend;
@@ -42,8 +43,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
       _canResend = false;
       _remainingSeconds = _countDownSecond;
     });
-    final authViewModel = ref.read(authViewModelProvider.notifier);
-    authViewModel.sendMail();
+    _authViewModel.sendMail();
     _startCountDown();
   }
 
@@ -52,9 +52,9 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
     super.initState();
     _canResend = false;
     _remainingSeconds = _countDownSecond;
+    _authViewModel = ref.read(authViewModelProvider.notifier);
     Future(() {
-      final authViewModel = ref.read(authViewModelProvider.notifier);
-      authViewModel.sendMail();
+      _authViewModel.sendMail();
       _startCountDown();
     });
   }
@@ -92,8 +92,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(Sizes.s56),
               ),
-              onPressed: () =>
-                  ref.read(authViewModelProvider.notifier).signOut(),
+              onPressed: () => _authViewModel.signOut(),
               child: Text(
                 'Cancel',
                 style: Theme.of(context).textTheme.labelLarge,

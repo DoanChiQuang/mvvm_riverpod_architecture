@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 import 'package:mvvm_riverpod_architecture/src/routing/app_router.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/view_model/onboarding_viewmodel.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/widgets/banner_widget.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/widgets/onboarding_banner_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_center.dart';
 
@@ -12,19 +12,19 @@ class OnboardingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onboardingStateViewModel = ref.watch(onboardingViewModelProvider);
+    final onboardingState = ref.watch(onboardingViewModelProvider);
     return Scaffold(
       body: CustomCenter(
         padding: const EdgeInsets.all(Sizes.s16),
         child: Column(
           children: [
-            const BannerWidget(),
+            const OnboardingBannerWidget(),
             gapH16,
             FilledButton(
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(Sizes.s56),
               ),
-              onPressed: !onboardingStateViewModel.isLoading
+              onPressed: !onboardingState.isLoading
                   ? () async {
                       final onboardingViewModel =
                           ref.read(onboardingViewModelProvider.notifier);

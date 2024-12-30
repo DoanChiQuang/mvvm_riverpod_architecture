@@ -4,13 +4,15 @@ import 'package:go_router/go_router.dart';
 import 'package:mvvm_riverpod_architecture/src/data/repositories/auth/auth_repository.dart';
 import 'package:mvvm_riverpod_architecture/src/data/repositories/onboarding/onboarding_repository.dart';
 import 'package:mvvm_riverpod_architecture/src/domain/model/todo/todo_model.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signin/signin_screen.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/signup/signup_screen.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/auth/widgets/verify/verify_screen.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/todo/widgets/edit_todo_screen.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/todo/widgets/todos_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/screens/account_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/screens/update_password_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/screens/signin_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/screens/signup_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/auth/screens/verify_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/todo/screens/edit_todo_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/todo/screens/list_todo_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/refresh_listenable.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/widgets/onboarding_screen.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/onboarding/screens/onboarding_screen.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/scaffold_with_navigation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -29,6 +31,7 @@ enum AppRoute {
   addTodo,
   editTodo,
   account,
+  updatePass,
 }
 
 @riverpod
@@ -72,16 +75,14 @@ GoRouter goRouter(Ref ref) {
         if (path.startsWith('/onboarding') ||
             path.startsWith('/todos') ||
             path.startsWith('/account') ||
-            path.startsWith('/verify')) {
+            path.startsWith('/verify') ||
+            path.startsWith('/updatePass')) {
           return '/signIn';
         }
       }
       return null;
     },
-    refreshListenable: Listenable.merge([
-      GoRouterRefreshStream(authRepository.authStateChanges()),
-      GoRouterRefreshStream(authRepository.userChanges()),
-    ]),
+    refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
     routes: [
       GoRoute(
         path: '/onboarding',
@@ -123,7 +124,7 @@ GoRouter goRouter(Ref ref) {
                 path: '/todos',
                 name: AppRoute.todos.name,
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: TodosScreen(),
+                  child: ListTodoScreen(),
                 ),
                 routes: [
                   GoRoute(
@@ -162,8 +163,20 @@ GoRouter goRouter(Ref ref) {
                 path: '/account',
                 name: AppRoute.account.name,
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: Placeholder(),
+                  child: AccountScreen(),
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'updatePass',
+                    name: AppRoute.updatePass.name,
+                    pageBuilder: (context, state) {
+                      return const MaterialPage(
+                        fullscreenDialog: true,
+                        child: UpdatePasswordScreen(),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

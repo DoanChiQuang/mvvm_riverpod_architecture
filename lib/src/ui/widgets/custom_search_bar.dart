@@ -4,11 +4,9 @@ import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 class CustomSearchBar extends StatefulWidget {
   const CustomSearchBar({
     super.key,
-    required this.data,
     required this.onChanged,
   });
 
-  final List data;
   final ValueChanged onChanged;
 
   @override
@@ -21,6 +19,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   void _onChanged(String query) {
     setState(() => _query = query);
+    widget.onChanged(query);
   }
 
   void _clear() {
@@ -28,6 +27,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       _query = '';
       _controller.clear();
     });
+    widget.onChanged('');
   }
 
   @override

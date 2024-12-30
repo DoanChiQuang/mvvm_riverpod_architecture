@@ -9,7 +9,7 @@ class OnboardingViewModel extends _$OnboardingViewModel {
 
   @override
   Future<void> build() async {
-    _onboardingRepository = ref.read(onboardingRepositoryProvider).requireValue;
+    _onboardingRepository = ref.watch(onboardingRepositoryProvider).requireValue;
   }
 
   Future<void> completeOnboarding() async {

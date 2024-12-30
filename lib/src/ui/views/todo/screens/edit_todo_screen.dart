@@ -5,8 +5,9 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mvvm_riverpod_architecture/src/constants/sizes.dart';
 import 'package:mvvm_riverpod_architecture/src/domain/model/todo/todo_model.dart';
-import 'package:mvvm_riverpod_architecture/src/ui/views/todo/view_model/todo_viewmodel.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/views/todo/view_model/todos_viewmodel.dart';
 import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_center.dart';
+import 'package:mvvm_riverpod_architecture/src/ui/widgets/custom_loading.dart';
 import 'package:mvvm_riverpod_architecture/src/utils/helpers/async_value_ui.dart';
 
 class EditTodoScreen extends ConsumerStatefulWidget {
@@ -25,7 +26,7 @@ class EditTodoScreen extends ConsumerStatefulWidget {
 
 class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  late TodosViewModel _todosViewModel;
   late String? _title;
   late String? _description;
 
@@ -34,18 +35,25 @@ class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
       final formData = _formKey.currentState?.value;
       final title = formData?['title'];
       final description = formData?['description'];
-      if (title != _title && description != _description) {
-        final todoViewModel =
-            ref.read(todoViewModelProvider(TodoActivity.edit.name).notifier);
-        final success = await todoViewModel.submit(
-          todoId: widget.todoId,
+      if (title == _title && description == _description) {
+        context.pop();
+        return;
+      }
+      bool success = false;
+      if (widget.todoId == null) {
+        success = await _todosViewModel.create(
           title: title,
           description: description,
         );
-        if (success && mounted) {
-          context.pop();
-        }
       } else {
+        success = await _todosViewModel.edit(
+          todoId: '',
+          title: title,
+          description: description,
+          status: widget.todo!.status,
+        );
+      }
+      if (success && mounted) {
         context.pop();
       }
     }
@@ -61,16 +69,27 @@ class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
       _title = '';
       _description = '';
     }
+    _todosViewModel = ref.read(todosViewModelProvider(const [
+      TodosType.create,
+      TodosType.edit,
+    ]).notifier);
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      todoViewModelProvider(TodoActivity.edit.name),
-      (_, state) => state.showAlertDialogOnError(context),
+      todosViewModelProvider(const [
+        TodosType.create,
+        TodosType.edit,
+      ]),
+      (_, state) {
+        state.showAlertDialogOnError(context);
+      },
     );
-    final todoStateViewModel =
-        ref.watch(todoViewModelProvider(TodoActivity.edit.name));
+    final todosState = ref.watch(todosViewModelProvider(const [
+      TodosType.create,
+      TodosType.edit,
+    ]));
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.todoId == null ? 'Create' : 'Edit'),
@@ -122,17 +141,10 @@ class _EditTodoScreenState extends ConsumerState<EditTodoScreen> {
                 style: FilledButton.styleFrom(
                   minimumSize: const Size.fromHeight(Sizes.s56),
                 ),
-                onPressed: !todoStateViewModel.isLoading ? _onSubmit : null,
-                child: !todoStateViewModel.isLoading
+                onPressed: !todosState.isLoading ? _onSubmit : null,
+                child: !todosState.isLoading
                     ? const Text('Save')
-                    : const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                          gapW16,
-                          Text('Saving...'),
-                        ],
-                      ),
+                    : const CustomLoading(message: 'Saving...'),
               ),
             ],
           ),

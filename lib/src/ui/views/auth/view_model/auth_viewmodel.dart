@@ -1,4 +1,5 @@
 import 'package:mvvm_riverpod_architecture/src/data/repositories/auth/auth_repository.dart';
+import 'package:mvvm_riverpod_architecture/src/domain/model/user/user_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_viewmodel.g.dart';
@@ -9,7 +10,7 @@ class AuthViewModel extends _$AuthViewModel {
 
   @override
   FutureOr<void> build() {
-    _authRepository = ref.read(authRepositoryProvider);
+    _authRepository = ref.watch(authRepositoryProvider);
   }
 
   Future<void> signUp({
@@ -45,6 +46,20 @@ class AuthViewModel extends _$AuthViewModel {
     );
   }
 
+  Future<bool> updatePassword({required String password}) async {
+    state = const AsyncLoading();
+    AsyncValue result = await AsyncValue.guard(
+      () => _authRepository.updatePassword(password: password),
+    );
+    if (result.hasError) {
+      state = AsyncError(
+        result.error.toString(),
+        StackTrace.current,
+      );
+    }
+    return result.hasError == false;
+  }
+
   Future<void> sendMail() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
@@ -57,5 +72,9 @@ class AuthViewModel extends _$AuthViewModel {
     state = await AsyncValue.guard(
       () => _authRepository.reload(),
     );
+  }
+
+  UserModel? getCurrentUser() {
+    return _authRepository.currentUser;
   }
 }
